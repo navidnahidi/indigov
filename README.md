@@ -28,9 +28,7 @@ To get started with the Indigov backend, follow these steps:
   
 
 ```
-
 git clone https://github.com/navidnahidi/indigov
-
 ```
 
 2.  Use the correct version of node:
@@ -49,6 +47,41 @@ cd indigov-backend npm install
 ```
 npm start
 ```
+
+
+## Routes
+
+1.  **GET /constituents**  
+    Retrieve a list of constituents.
+**Parameters:**
+	-   `page` (optional): Specifies the page number for pagination. [Number 1 or greater]
+	-   `size` (optional): Specifies the number of items per page.  [Number 1 or greater]
+	```
+	curl http://localhost:3000/constituents
+	```
+    
+2.  **POST /constituents**  
+    Add a new constituent.
+-   **Required Fields (in request body):**
+    -   `email`: Email address of the constituent. (str)
+    -   `name`: Name of the constituent. (str)
+    -   `address`: Address of the constituent. (str)
+    -   `signUpTime`: Date and time when the constituent signed up. (UTC timestamp as a string)
+
+    For example, for the POST request, you need to include all these fields in the request body as JSON data.
+	```
+	curl -X POST \
+	  -H "Content-Type: application/json" \
+	  -d '{"email": "john@example.com", "name": "John Doe", "address": "123 Main St", "signUpTime": "2024-04-10T10:00:00Z"}' \
+	  http://localhost:3000/constituents
+	```
+
+3.  **GET /constituents/export**  
+    Export constituents to a CSV file.
+	```
+	curl -o constituents.csv http://localhost:3000/constituents/export
+	```
+
 
 ## Scripts
 
