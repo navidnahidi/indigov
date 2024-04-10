@@ -1,4 +1,5 @@
-import { Constituent } from '../models/constituents';
+import { Constituent } from '../../models/constituents';
+import { normalizeEmail } from '../../utils/normalizers';
 
 let constituents: Constituent[] = [];
 
@@ -7,19 +8,22 @@ export const getAllConstituents = (): Constituent[] => {
 };
 
 export const addConstituent = (newConstituent: Constituent): void => {
+    const newConstituentEmail = normalizeEmail(newConstituent.email);
     const existingConstituentIndex = constituents.findIndex(
-        (constituent) => constituent.email === newConstituent.email
+        (constituent) => constituent.email === newConstituentEmail
     );
 
     if (existingConstituentIndex !== -1) {
-        // Merge duplicate constituent
         constituents[existingConstituentIndex] = {
             ...constituents[existingConstituentIndex],
             ...newConstituent,
+            email: newConstituentEmail,
         };
     } else {
-        // Add new constituent
-        constituents.push(newConstituent);
+        constituents.push({
+            ...newConstituent,
+            email: newConstituentEmail
+        });
     }
 };
 
@@ -30,7 +34,3 @@ export const getTotalConstituents = () => {
 export const getConstituentsChunk = (offset: number, limit: number) => {
     return constituents.slice(offset, offset + limit);
 }
-
-export const exportConstituentsToCsv = (): any => {
-    return constituents;
-};
